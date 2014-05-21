@@ -1,9 +1,13 @@
 #include "parse.h"
 #include "circular_buffer.h"
+#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#define MAX(A,B) (A>B?A:B)
+#define ABS(A) (A>0?A:-A)
 
 /*
  * for converting string to int:
@@ -93,6 +97,33 @@ void print_status(status* s)
 	printf("reading_time: %i\n", s -> reading_time);
 }
 
+void execute_command(status* beginning, status* end, int max_preassure) {
+	if (beginning -> contact_points != end -> contact_points) {
+		// something changed mid swipe... maybe do something about this later
+		return;
+	}
+
+	if (max_preassure < 20) {
+		// they probably brushed the pad... ignore this
+		return;
+	}
+
+	int distance_x = end -> contact_xpos - beginning -> contact_xpos;
+	int distance_y = end -> contact_ypos - beginning -> contact_ypos;
+
+	// this may seem backwards, but it is an attempt to normalize them in order to pick a decision
+	int normal_x = ABS(distance_x) * TOUCHPAD_HEIGHT;
+	int normal_y = ABS(distance_y) * TOUCHPAD_WIDTH;
+
+	if (normal_x < normal_y) {
+		//swipe up/down
+	} else {
+		//swipe left/right
+		system("bspc desktop -f next");
+	}
+
+}
+
 
 int main(int argc, char** argv) {
 
@@ -101,37 +132,32 @@ int main(int argc, char** argv) {
 	
 
 	status* next = NULL;
-	status* prev = NULL;
-
-	char* action = NULL;
+	status* initial = NULL;
+	char max_preassure = 0;
+	
 
 	while ( 1 ) {
 		next=read_std_line();
 		if (next != NULL) {
-			if (prev != NULL) {
-				if (next -> contact_points == 3 &&
-					prev -> contact_points == 3 &&
-					next -> reading_time - prev -> reading_time < 30) {
-					action = "bspc desktop -f prev";
-				}
-			} else {
-				action == NULL;
+			if (initial == NULL) {
+				initial = next;
 			}
+
+
 
 			if (next -> contact_points == 0) {
-				if (action != NULL) {
-					system(action);
-					action = NULL;
-				}
+				execute_command(initial, next, max_preassure);
+				max_preassure = 0;
+				free(initial);
+				initial = NULL;
+			} else {
+				max_preassure = MAX(max_preassure, next -> contact_preassure);
 			}
-
-
-			free(prev);
-			prev = next;
 		}
 	}
 
 
 	free(buffer);
+	return 0;
 
 }
