@@ -98,52 +98,14 @@ void print_status(status* s)
     printf("reading_time: %i\n", s -> reading_time);
 }
 
-void execute_command(status* beginning, status* end, int max_preassure) {
-    if (beginning == end) {
-        puts("error type 0");
-        return;
-    }
-
-    if (beginning -> contact_points != end -> contact_points) {
-        // something changed mid swipe... maybe do something about this later
-        puts("error type 1");
-       // return;
-    }
-
-    if (max_preassure < 20) {
-        // they probably brushed the pad... ignore this
-        puts("error type 2");
-        return;
-    }
-
-    int distance_x = end -> contact_xpos - beginning -> contact_xpos;
-    int distance_y = end -> contact_ypos - beginning -> contact_ypos;
-
-    // this may seem backwards, but it is an attempt to normalize them in order to pick a decision
-    int normal_x = ABS(distance_x) * TOUCHPAD_HEIGHT;
-    int normal_y = ABS(distance_y) * TOUCHPAD_WIDTH;
-
-    if (normal_x < normal_y) {
-        //swipe up/down
-        system("bspc desktop -f prev");
-    } else {
-        //swipe left/right
-        system("bspc desktop -f next");
-    }
-
-}
-
 
 //char* identify_action(int duration, int dx, int dy, int fingers)
 int main(int argc, char** argv) {
 
-    //c_buf* buffer = makebuffer(4);
-
-
-
     status* next = NULL;
     status* initial = NULL;
     char max_preassure = 0;
+    char max_fingers = 0;
 
 
     while ( 1 ) {
@@ -158,21 +120,22 @@ int main(int argc, char** argv) {
 
 
             if (next -> contact_points == 0) {
-                identify_action(next->reading_time-initial->reading_time,
-                	            next->contact_xpos-initial->contact_xpos,
-                	            next->contact_ypos-initial->contact_ypos,
-                	            initial -> contact_points);
+                system(
+                	identify_action(next->reading_time-initial->reading_time,
+                	                next->contact_xpos-initial->contact_xpos,
+                	                next->contact_ypos-initial->contact_ypos,
+                	                max_fingers));
                 max_preassure = 0;
+                max_fingers = 0;
                 free(initial);
                 initial = NULL;
             } else {
                 max_preassure = MAX(max_preassure, next -> contact_preassure);
+                max_fingers = MAX(max_fingers, next -> contact_points);
             }
         }
     }
 
-
-    //free(buffer);
     return 0;
 
 }

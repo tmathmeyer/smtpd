@@ -1,21 +1,35 @@
 
-
-/*
- * Touchpad dimensions
- *    as long as the ratio lines up this is fine, ie:
- *			1599:901 -> 16:9 will be suficient
- */
-
- #define TOUCHPAD_HEIGHT 9
- #define TOUCHPAD_WIDTH  16
+#define trackpad_width 30
+#define trackpad_height 19
+#define trackpad_scale_factor 20
+#define trackpad_min_duration 100
 
 
-/*
- * System commands for each swipe. leave a blank command as an empty string
- */
+#define RIGHT_2 ""
+#define RIGHT_3 "bspc desktop -f prev"
+#define RIGHT_4 ""
+#define RIGHT_5 ""
 
-#define FINGERS_3 ["", "", "bspc desktop -f prev", "bspc desktop -f next", ""]
-#define FINGERS_4 ["up_cmd", "down_cmd", "left_cmd", "right_cmd", "tap_cmd"]
-#define FINGERS_5 ["up_cmd", "down_cmd", "left_cmd", "right_cmd", "tap_cmd"]
 
-#define trackpad_width 
+#define LEFT_2 ""
+#define LEFT_3 "bspc desktop -f next"
+#define LEFT_4 ""
+#define LEFT_5 ""
+
+
+#define UP_2 ""
+#define UP_3 ""
+#define UP_4 ""
+#define UP_5 ""
+
+
+#define DOWN_2 ""
+#define DOWN_3 ""
+#define DOWN_4 ""
+#define DOWN_5 ""
+
+
+#define TAP_2 ""
+#define TAP_3 ""
+#define TAP_4 ""
+#define TAP_5 ""

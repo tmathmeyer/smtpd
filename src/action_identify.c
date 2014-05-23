@@ -1,6 +1,8 @@
 #include "parse.h"
 #include "config.h"
 #include "action_identify.h"
+#include <math.h>
+#include <stdio.h>
 
 #define ABS(A) ((A)>0?(A):-(A))
 
@@ -10,19 +12,20 @@ char* identify_action(int duration, int dx, int dy, int fingers) {
     int mx = ABS(nx);
     int my = ABS(ny);
 
-    if (Math.sqrt(nx*nx + ny*ny) <= trackpad_scale_factor ||
-    	duration <= trackpad_min_duration) {
+    float dist = sqrt(nx*nx + ny*ny);
+    if (dist <= trackpad_scale_factor || duration <= trackpad_min_duration) {
+    	printf("\tdist: %f\n\tdur: %i\n", dist, duration);
     	return tap(fingers);
     }
 
-    if (mx > my) {
+    if (mx*3 > my) {
     	if (nx < 0) {
     		return swipeleft(fingers);
     	} else {
     		return swiperight(fingers);
     	}
     } else {
-    	if (ny < 0) {
+    	if (ny > 0) {
     		return swipedown(fingers);
     	} else {
     		return swipeup(fingers);
@@ -33,17 +36,52 @@ char* identify_action(int duration, int dx, int dy, int fingers) {
 
 
 char* swipeleft (int fingers) {
-	return "bspc desktop -f next";
+	printf("swipeleft: %i fingers\n", fingers);
+	switch(fingers) {
+		case 2: return LEFT_2;
+		case 3: return LEFT_3;
+		case 4: return LEFT_4;
+		case 5: return LEFT_5;
+		default: "";
+	}
 }
 char* swiperight(int fingers) {
-	return "bspc desktop -f prev";
+	printf("swiperight: %i fingers\n", fingers);
+	switch(fingers) {
+		case 2: return RIGHT_2;
+		case 3: return RIGHT_3;
+		case 4: return RIGHT_4;
+		case 5: return RIGHT_5;
+		default: "";
+	}
 }
 char* swipeup   (int fingers) {
-	return "";
+	printf("swipeup: %i fingers\n", fingers);
+	switch(fingers) {
+		case 2: return UP_2;
+		case 3: return UP_3;
+		case 4: return UP_4;
+		case 5: return UP_5;
+		default: "";
+	}
 }
 char* swipedown (int fingers) {
-	return "";
+	printf("swipedown: %i fingers\n", fingers);
+	switch(fingers) {
+		case 2: return DOWN_2;
+		case 3: return DOWN_3;
+		case 4: return DOWN_4;
+		case 5: return DOWN_5;
+		default: "";
+	}
 }
 char* tap(int fingers) {
-	return "";
+	printf("tap: %i fingers\n", fingers);
+	switch(fingers) {
+		case 2: return TAP_2;
+		case 3: return TAP_3;
+		case 4: return TAP_4;
+		case 5: return TAP_5;
+		default: "";
+	}
 }
