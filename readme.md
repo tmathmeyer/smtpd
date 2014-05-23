@@ -4,11 +4,11 @@
 #####SMTPD is not a finished product by any means. While I can be reasonably certain that this wont break anything, you can't take my word for it. 
 
 ###TODO:
-- daemonisation -> its a bit silly, but this is not yet in deamon form. expect it soon (a week?)
-- read from synclient directly, instead of having it piped into stdin
-- trackpad size discovery -> right now it needs to be entered manually
-- gesture detection -> being able to discern things like swiping in a circle
-- detecting dependance on forked synaptic driver (someday i would like to incorperate this into my own fork of that, but I'm going to wait for wayland)
+- [ ] daemonisation -> its a bit silly, but this is not yet in deamon form. expect it soon (a week?)
+- [ ] read from synclient directly, instead of having it piped into stdin
+- [ ] trackpad size discovery -> right now it needs to be entered manually
+- [ ] gesture detection -> being able to discern things like swiping in a circle
+- [ ] detecting dependance on forked synaptic driver (someday i would like to incorperate this into my own fork of that, but I'm going to wait for wayland)
 
 ###INSTALATION:
 ######this is only tested on arch linux. attempt at your own risk
