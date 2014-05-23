@@ -1,97 +1,53 @@
 
-//#include "parse.h"
+#include "parse.h"
+#include "action_identify.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+
+#define MAX(A,B) (A>B?A:B)
+#define ABS(A) (A>0?A:-A)
+
+
+//char* identify_action(int duration, int dx, int dy, int fingers)
+int main(int argc, char** argv) {
+
+    status* next = NULL;
+    status* initial = NULL;
+    char max_preassure = 0;
+    char max_fingers = 0;
+
+    //FILE* desc = fopen("synclient-m.in", "r");
+    FILE* desc = popen("synclient -m 10", "r");
+
+    while ( 1 ) {
+        next=read_mouse_std(desc);
+        if (next != NULL) {
+
+            if (initial == NULL) {
+                initial = next;
+                puts("setting initial");
+            }
 
 
 
-/*
- * utility for building a number from a character stream
- */
-int build_int(int old, char n) {
-    if (n == ' ') {
-        n = '0';
+            if (next -> contact_points == 0) {
+                system(
+                	identify_action(next->reading_time-initial->reading_time,
+                	                next->contact_xpos-initial->contact_xpos,
+                	                next->contact_ypos-initial->contact_ypos,
+                	                max_fingers));
+                max_preassure = 0;
+                max_fingers = 0;
+                free(initial);
+                initial = NULL;
+            } else {
+                max_preassure = MAX(max_preassure, next -> contact_preassure);
+                max_fingers = MAX(max_fingers, next -> contact_points);
+            }
+        }
     }
-    if (n == '.') {
-        return old;
-    }
-    if (n < '0' || n > '9') {
-        return -1;
-    }
-    return (old*10) + (n-'0');
-}
 
-
-
-/* 
- * reads in form:
- *      \ *[matching]\ *=[0-9]^\n
- *   
- * MUST be queried in order, or given a new filedescriptor for each call
- */
-int config_read(FILE* descriptor, char* matching, int* saveto) {
-	char c, s=0, *old = matching;
-	// clear the leading spaces
-	while( (c=fgetc(descriptor)) == ' ');
-
-	while(*matching == c) {
-		c = fgetc(descriptor);
-		s = *(++matching)==0;
-	}
-
-	if (!s) {
-		//read to end of line
-		while( (c=fgetc(descriptor)) != '\n');
-		return config_read(descriptor, old, saveto);
-	}
-
-	//read up to the = sign
-	while( (c=fgetc(descriptor)) == ' ');
-	while( (c=fgetc(descriptor)) == ' ');
-
-	int r = build_int(0, c);
-	while( (c = fgetc(descriptor)) != ' ' && c != '\n' && c != 0) {
-        r = build_int(r, c);
-    }
-    while( (c=fgetc(descriptor)) != '\n');
-
-    *saveto = r;
-    return 1;
-}
-
-
-
-get_touchpad_stats() {
-	FILE* op = popen("cat synclient.in", "r");
-	int re = 0;
-	int le = 0;
-	int to = 0;
-	int bt = 0;
-	config_read(op, "LeftEdge", &le);
-	config_read(op, "RightEdge", &re);
-	config_read(op, "TopEdge", &to);
-	config_read(op, "BottomEdge", &bt);
-
-	printf("LeftEdge %i\n", le);
-	printf("RightEdge %i\n", re);
-	printf("TopEdge %i\n", to);
-	printf("BottomEdge %i\n", bt);
-}
-
-
-
-int main() {
-
-	get_touchpad_stats();
-
-/*
-	int re = 0;
-	int le = 0;
-	config_read(op, "LeftEdge", &le);
-	config_read(op, "RightEdge", &re);
-	printf("LeftEdge:\t%i\n", le);
-	printf("RightEdge:\t%i\n", re);
-
-	fclose(op);
-*/
+    return 0;
 
 }

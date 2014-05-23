@@ -1,22 +1,31 @@
 
 
-smtpd: parse.o c_buf.o action.o
-	gcc parse.o c_buf.o action.o -o smtpd -lm
+smtpd: build_config action.o
+	gcc -Wall smtpd.c parse.o action.o -o ../smtpd -lm \
+	&& make purge
+
+
+
+
 
 parse.o: parse.h parse.c
-	gcc -c parse.c
+	gcc -c -Wall parse.c
 
-c_buf.o: circular_buffer.c circular_buffer.h
-	gcc -c circular_buffer.c -o c_buf.o
-
-action.o: action_identify.c action_identify.h config.h
-	gcc -c action_identify.c -o action.o -lm
+action.o: action_identify.c action_identify.h config.h gen/sizes.h
+	gcc -c -Wall action_identify.c -o action.o -lm
 
 
 
 
 
+build_config: build_config.c parse.o
+	gcc -Wall build_config.c parse.o -o confgen && \
+	rm -rf gen && mkdir gen && ./confgen && rm confgen
+
+purge:
+	rm -rf gen *.o
 
 
-clean:
-	rm *.o smtpd
+
+clean: purge
+	rm smtpd

@@ -1,6 +1,4 @@
 
-#define trackpad_width 30
-#define trackpad_height 19
 #define trackpad_scale_factor 20
 #define trackpad_min_duration 100
 

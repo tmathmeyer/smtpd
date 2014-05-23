@@ -31,5 +31,5 @@ typedef struct input {
 
 
 int build_int(int old, char n);
-status* read_std_line();
+status* read_mouse_std(FILE* desc);
 int config_read(FILE* descriptor, char* matching, int* saveto);

@@ -1,14 +1,7 @@
 #include "parse.h"
-#include "circular_buffer.h"
-#include "config.h"
-#include "action_identify.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
-#define MAX(A,B) (A>B?A:B)
-#define ABS(A) (A>0?A:-A)
 
 /*
  * utility for building a number from a character stream
@@ -119,59 +112,4 @@ int config_read(FILE* descriptor, char* matching, int* saveto) {
 
     *saveto = r;
     return 1;
-}
-
-
-void print_status(status* s)
-{
-    printf("contact_xpos: %i\n", s -> contact_xpos);
-    printf("contact_ypos: %i\n", s -> contact_ypos);
-    printf("contact_preassure: %i\n", s -> contact_preassure);
-    printf("contact_points: %i\n", s -> contact_points);
-    printf("contact_size: %i\n", s -> contact_size);
-    printf("reading_time: %i\n", s -> reading_time);
-}
-
-
-//char* identify_action(int duration, int dx, int dy, int fingers)
-int main(int argc, char** argv) {
-
-    status* next = NULL;
-    status* initial = NULL;
-    char max_preassure = 0;
-    char max_fingers = 0;
-
-    //FILE* desc = fopen("synclient-m.in", "r");
-    FILE* desc = popen("synclient -m 10", "r");
-
-    while ( 1 ) {
-        next=read_mouse_std(desc);
-        if (next != NULL) {
-
-            if (initial == NULL) {
-                initial = next;
-                puts("setting initial");
-            }
-
-
-
-            if (next -> contact_points == 0) {
-                system(
-                	identify_action(next->reading_time-initial->reading_time,
-                	                next->contact_xpos-initial->contact_xpos,
-                	                next->contact_ypos-initial->contact_ypos,
-                	                max_fingers));
-                max_preassure = 0;
-                max_fingers = 0;
-                free(initial);
-                initial = NULL;
-            } else {
-                max_preassure = MAX(max_preassure, next -> contact_preassure);
-                max_fingers = MAX(max_fingers, next -> contact_points);
-            }
-        }
-    }
-
-    return 0;
-
 }
