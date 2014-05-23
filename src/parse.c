@@ -98,13 +98,15 @@ void print_status(status* s)
 }
 
 void execute_command(status* beginning, status* end, int max_preassure) {
-	if (beginning -> contact_points != end -> contact_points) {
+	//if (beginning -> contact_points != end -> contact_points) {
 		// something changed mid swipe... maybe do something about this later
-		return;
-	}
+	//	return;
+	//}
 
-	if (max_preassure < 20) {
+	if (max_preassure <= 19) {
 		// they probably brushed the pad... ignore this
+		puts("not hard enough");
+		printf("%i\n", max_preassure);
 		return;
 	}
 
@@ -114,15 +116,46 @@ void execute_command(status* beginning, status* end, int max_preassure) {
 	// this may seem backwards, but it is an attempt to normalize them in order to pick a decision
 	int normal_x = ABS(distance_x) * TOUCHPAD_HEIGHT;
 	int normal_y = ABS(distance_y) * TOUCHPAD_WIDTH;
+	int abnormal_x = ABS(distance_x) / TOUCHPAD_HEIGHT;
+	int abnormal_y = ABS(distance_y) / TOUCHPAD_WIDTH;
+	int time = end -> reading_time - beginning -> reading_time;
+	
 
-	if (normal_x < normal_y) {
-		//swipe up/down
+	printf("\tdy: %i\n", abnormal_y);
+	printf("\tdx: %i\n", abnormal_x);
+	printf("\ttd: %i\n", time);
+
+
+	if ((abnormal_x <= 2 && abnormal_y <= 2) || time<200 ){
+		puts("tap");
+
 	} else {
-		//swipe left/right
-		system("bspc desktop -f next");
+
+
+		if (normal_x < normal_y) {
+			//swipe up/down
+			puts("swipe up/down");
+			
+		} else {
+			//swipe left/right
+			if (beginning -> contact_points == 3) {
+				if (distance_x < 0) {
+					//system("bspc desktop -f prev");
+					puts("<<<<<<<<<");
+				} else {
+					//system("bspc desktop -f next");
+					puts(">>>>>>>>>");
+				}
+			} else {
+				printf("%i\n", beginning -> contact_points);
+			}
+		}
 	}
 
 }
+
+
+
 
 
 int main(int argc, char** argv) {
@@ -134,6 +167,7 @@ int main(int argc, char** argv) {
 	status* next = NULL;
 	status* initial = NULL;
 	char max_preassure = 0;
+	char max_contacts  = 0;
 	
 
 	while ( 1 ) {
@@ -146,12 +180,15 @@ int main(int argc, char** argv) {
 
 
 			if (next -> contact_points == 0) {
+				initial -> contact_points = max_contacts;
 				execute_command(initial, next, max_preassure);
 				max_preassure = 0;
+				max_contacts = 0;
 				free(initial);
 				initial = NULL;
 			} else {
 				max_preassure = MAX(max_preassure, next -> contact_preassure);
+				max_contacts = MAX(max_contacts, next -> contact_points);
 			}
 		}
 	}

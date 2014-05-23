@@ -1,6 +1,6 @@
 
 
-smtpd: parse.o c_buf.o
+smtpd: parse.o c_buf.o config.h
 	gcc parse.o c_buf.o -o smtpd
 
 parse.o: parse.h parse.c

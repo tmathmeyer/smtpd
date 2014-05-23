@@ -2,12 +2,13 @@
 
 /*
  * Touchpad dimensions
- *    as long as the ratio lines up this is fine, ie:
- *			1599:901 -> 16:9 will be suficient
+ *    take the output of `synclient`
+ *    height = (bottomedge-topedge)/10
+ *    width =  (right-left)/10;
  */
 
- #define TOUCHPAD_HEIGHT 9
- #define TOUCHPAD_WIDTH  16
+ #define TOUCHPAD_HEIGHT 189
+ #define TOUCHPAD_WIDTH  300
 
 
 /*
