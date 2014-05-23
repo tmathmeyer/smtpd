@@ -1,6 +1,7 @@
 #include "parse.h"
 #include "circular_buffer.h"
 #include "config.h"
+#include "action_identify.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -133,9 +134,10 @@ void execute_command(status* beginning, status* end, int max_preassure) {
 }
 
 
+//char* identify_action(int duration, int dx, int dy, int fingers)
 int main(int argc, char** argv) {
 
-    c_buf* buffer = makebuffer(4);
+    //c_buf* buffer = makebuffer(4);
 
 
 
@@ -156,7 +158,10 @@ int main(int argc, char** argv) {
 
 
             if (next -> contact_points == 0) {
-                execute_command(initial, next, max_preassure);
+                identify_action(next->reading_time-initial->reading_time,
+                	            next->contact_xpos-initial->contact_xpos,
+                	            next->contact_ypos-initial->contact_ypos,
+                	            initial -> contact_points);
                 max_preassure = 0;
                 free(initial);
                 initial = NULL;
@@ -167,7 +172,7 @@ int main(int argc, char** argv) {
     }
 
 
-    free(buffer);
+    //free(buffer);
     return 0;
 
 }

@@ -17,3 +17,5 @@
 #define FINGERS_3 ["", "", "bspc desktop -f prev", "bspc desktop -f next", ""]
 #define FINGERS_4 ["up_cmd", "down_cmd", "left_cmd", "right_cmd", "tap_cmd"]
 #define FINGERS_5 ["up_cmd", "down_cmd", "left_cmd", "right_cmd", "tap_cmd"]
+
+#define trackpad_width 

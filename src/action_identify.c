@@ -1,15 +1,8 @@
 #include "parse.h"
 #include "config.h"
+#include "action_identify.h"
 
 #define ABS(A) ((A)>0?(A):-(A))
-
-char* swipeleft (int fingers);
-char* swiperight(int fingers);
-char* swipeup   (int fingers);
-char* swipedown (int fingers);
-char* tap(int fingers);
-
-
 
 char* identify_action(int duration, int dx, int dy, int fingers) {
     int nx = dx/trackpad_width;
@@ -35,7 +28,22 @@ char* identify_action(int duration, int dx, int dy, int fingers) {
     		return swipeup(fingers);
     	}
     }
-
     return "";
+}
 
+
+char* swipeleft (int fingers) {
+	return "bspc desktop -f next";
+}
+char* swiperight(int fingers) {
+	return "bspc desktop -f prev";
+}
+char* swipeup   (int fingers) {
+	return "";
+}
+char* swipedown (int fingers) {
+	return "";
+}
+char* tap(int fingers) {
+	return "";
 }
