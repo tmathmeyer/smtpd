@@ -16,14 +16,9 @@ parts:
   touch width (palming?)
 
 
-
-
-
-
-
-
-
 */
+
+#include <stdio.h>
 
 typedef struct input {
 	short contact_xpos;
@@ -37,3 +32,4 @@ typedef struct input {
 
 int build_int(int old, char n);
 status* read_std_line();
+int config_read(FILE* descriptor, char* matching, int* saveto);

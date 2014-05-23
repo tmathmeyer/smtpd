@@ -1,11 +1,7 @@
-#include <dirent.h>
 #include <unistd.h>
-#include <time.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-
+#include "daemon.h"
 
 
 void run_as_daemon(void (*post_fork)(int)) {
@@ -13,19 +9,21 @@ void run_as_daemon(void (*post_fork)(int)) {
 	pid = fork();
 
 	if (pid < 0) {
-		exit(EXIT_FAULURE);
+		exit(EXIT_FAILURE);
 	}
 	if (pid > 0) {
 		exit(EXIT_SUCCESS);
 	}
 
 	umask(0);
+
+	sid = setsid();
 	if (sid < 0) {
-		exit(EXIT_FAULURE);
+		exit(EXIT_FAILURE);
 	}
 
 	if ((chdir("/")) < 0) {
-		exit(EXIT_FAULURE);
+		exit(EXIT_FAILURE);
 	}
 
 	close(STDIN_FILENO);
