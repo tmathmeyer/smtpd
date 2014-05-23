@@ -14,7 +14,7 @@
 ######this is only tested on arch linux. attempt at your own risk
 - install the forked version of xf86-synaptics: xf86-input-synaptics-xswipe-git (availible in the aur and github)
 - clone this repo
-- edit the src/config.h file. define in the form [ACTION]_[#] "/run/this/script" is an action:
+- edit the src/config.h file. defines in the form [ACTION]_[#] "/run/this/script" is an action:
 	- each command is executed by system() with no root privelages, so make sure you use either things in your path or give the full path to the script/executable
 - edit the heuristics information at the top of the file, some of the information must be obtained from running `~$ synclient`
 	- trackpad_width -> this is equal to ABS(trackpad_left - trackpad_right) / 100 (these can be found in the output of synclient)
