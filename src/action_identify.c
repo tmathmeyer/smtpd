@@ -18,7 +18,7 @@ char* identify_action(int duration, int dx, int dy, int fingers) {
     	return tap(fingers);
     }
 
-    if (mx*3 > my) {
+    if (mx*2.7 > my) {
     	if (nx < 0) {
     		return swipeleft(fingers);
     	} else {
@@ -42,7 +42,7 @@ char* swipeleft (int fingers) {
 		case 3: return LEFT_3;
 		case 4: return LEFT_4;
 		case 5: return LEFT_5;
-		default: "";
+		default: return "";
 	}
 }
 char* swiperight(int fingers) {
@@ -52,7 +52,7 @@ char* swiperight(int fingers) {
 		case 3: return RIGHT_3;
 		case 4: return RIGHT_4;
 		case 5: return RIGHT_5;
-		default: "";
+		default: return "";
 	}
 }
 char* swipeup   (int fingers) {
@@ -62,7 +62,7 @@ char* swipeup   (int fingers) {
 		case 3: return UP_3;
 		case 4: return UP_4;
 		case 5: return UP_5;
-		default: "";
+		default: return "";
 	}
 }
 char* swipedown (int fingers) {
@@ -72,7 +72,7 @@ char* swipedown (int fingers) {
 		case 3: return DOWN_3;
 		case 4: return DOWN_4;
 		case 5: return DOWN_5;
-		default: "";
+		default: return "";
 	}
 }
 char* tap(int fingers) {
@@ -82,6 +82,6 @@ char* tap(int fingers) {
 		case 3: return TAP_3;
 		case 4: return TAP_4;
 		case 5: return TAP_5;
-		default: "";
+		default: return "";
 	}
 }
