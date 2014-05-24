@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
     char max_preassure = 0;
     char max_fingers = 0;
 
-    //FILE* desc = fopen("synclient-m.in", "r");
     FILE* desc = popen("synclient -m 10", "r");
 
 

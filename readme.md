@@ -16,11 +16,9 @@
 - clone this repo
 - edit the src/config.h file. defines in the form [ACTION]_[#] "/run/this/script" is an action:
 	- each command is executed by system() with no root privelages, so make sure you use either things in your path or give the full path to the script/executable
-- edit the heuristics information at the top of the file, some of the information must be obtained from running `~$ synclient`
-	- trackpad_width -> this is equal to ABS(trackpad_left - trackpad_right) / 100 (these can be found in the output of synclient)
-	- trackpad_height -> this is ABS(trackpad_bottom - trackpad_top) /100 (also from synclient output)
+- edit the heuristics information at the top of the file
 	- trackpad_scale_factor -> this is hueristics, tweak it until you like it. (will be editable throgh a CLI in the future)
 	- trackpad_min_duration -> this is the cutof in ms between what is considered a tap and a swipe. tweak this to your liking (will also be in the CLI)
-- run `make`
-- run `synclient -m 10 | ./smtpd`
+- run `make -C src`
+- run `./smtpd`
 - ignore the debug info
