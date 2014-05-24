@@ -19,7 +19,7 @@ char* identify_action(int duration, int dx, int dy, int fingers) {
     	return tap(fingers);
     }
 
-    if (mx*3 > my) {
+    if (mx > my) {
     	if (nx < 0) {
     		return swipeleft(fingers);
     	} else {

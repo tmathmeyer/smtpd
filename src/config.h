@@ -16,13 +16,13 @@
 
 
 #define UP_2 ""
-#define UP_3 ""
+#define UP_3 "bspc window -t fullscreen"
 #define UP_4 ""
 #define UP_5 ""
 
 
 #define DOWN_2 ""
-#define DOWN_3 ""
+#define DOWN_3 "bspc window -t tiled"
 #define DOWN_4 ""
 #define DOWN_5 ""
 

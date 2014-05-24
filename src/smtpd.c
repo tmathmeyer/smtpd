@@ -20,13 +20,13 @@ int main(int argc, char** argv) {
     //FILE* desc = fopen("synclient-m.in", "r");
     FILE* desc = popen("synclient -m 10", "r");
 
+
     while ( 1 ) {
         next=read_mouse_std(desc);
         if (next != NULL) {
 
             if (initial == NULL) {
                 initial = next;
-                puts("setting initial");
             }
 
 
