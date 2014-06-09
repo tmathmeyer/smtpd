@@ -1,3 +1,4 @@
 *.o
 smtpd
 *.DS_Store
+src/gen/*
