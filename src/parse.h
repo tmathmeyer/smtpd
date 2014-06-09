@@ -30,6 +30,12 @@ typedef struct input {
 } status;
 
 
-int build_int(int old, char n);
+// reads the contents of 'desc' to generate a status.
+// DOES NOT CLOSE THE FILE DESCRIPTOR
 status* read_mouse_std(FILE* desc);
+
+// used for building integers from config files.
+int build_int(int old, char n);
+
+// reads from a file
 int config_read(FILE* descriptor, char* matching, int* saveto);

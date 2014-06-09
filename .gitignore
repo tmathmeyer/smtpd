@@ -3,3 +3,4 @@ smtpd
 *.DS_Store
 *.out
 src/gen
+confgen

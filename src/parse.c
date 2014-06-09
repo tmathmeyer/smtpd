@@ -8,7 +8,7 @@
  */
 int build_int(int old, char n) {
     if (n == ' ') {
-        n = '0';
+        return old;
     }
     if (n == '.') {
         return old;
@@ -31,57 +31,28 @@ status* read_mouse_std(FILE* desc) {
     }
 
     status* cur = malloc(sizeof(status));
+    float temp_time_store;
 
-    cur -> reading_time = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> reading_time
-            = build_int(cur -> reading_time, lineID);
-    }
-    while( (lineID=fgetc(desc)) == ' ' );
+    fscanf(desc, "%f %i %i %s %s %s",
+           &(temp_time_store),
+           &(cur -> contact_xpos),
+           &(cur -> contact_ypos),
+           &(cur -> contact_preassure),
+           &(cur -> contact_points),
+           &(cur -> contact_size));
+    cur -> reading_time = (int) (temp_time_store * 1000);
 
-    cur -> contact_xpos = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> contact_xpos
-            = build_int(cur -> contact_xpos, lineID);
-    }
-    while( (lineID=fgetc(desc)) == ' ' );
-
-    cur -> contact_ypos = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> contact_ypos
-            = build_int(cur -> contact_ypos, lineID);
-    }
-    while( (lineID=fgetc(desc)) == ' ' );
-
-    cur -> contact_preassure = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> contact_preassure
-            = build_int(cur -> contact_preassure, lineID);
-    }
-    while( (lineID=fgetc(desc)) == ' ' );
-
-    cur -> contact_points = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> contact_points
-            = build_int(cur -> contact_points, lineID);
-    }
-    while( (lineID=fgetc(desc)) == ' ' );
-
-    cur -> contact_size = build_int(0, lineID);
-    while( (lineID=fgetc(desc)) != ' ' ) {
-        cur -> contact_size
-            = build_int(cur -> contact_size, lineID);
-    }
+    //scan to eol
     while( (lineID=fgetc(desc)) != '\n' );
 
     return cur;
 }
 
 
-/* 
+/*
  * reads in form:
- *      \ *[matching]\ *=[0-9]^\n
- *   
+ *      \[ *][matching]\[ *]=[ *][0-9]^\n
+ *
  * MUST be queried in order, or given a new filedescriptor for each call
  */
 int config_read(FILE* descriptor, char* matching, int* saveto) {
