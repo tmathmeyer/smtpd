@@ -1,11 +1,23 @@
 
 #include "parse.h"
 #include "action_identify.h"
-#include "smtpd.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-//#include <math.h>
+
+
+
+
+#define MAX(A,B) (A>B?A:B)
+#define ABS(A) (A>0?A:-A)
+
+typedef struct sample {
+    struct sample* next;
+    status* data;
+} sample;
+
+int analyze(sample* motionlist);
+int daemon_function();
 
 
 
@@ -66,7 +78,6 @@ int daemon_function() {
     while( 1 ) {
 
         next = read_mouse_std(desc);
-        printf("is next null? %i\n", next == NULL);
         if (next != NULL) {
             if (next -> contact_points == 0) {
                 analyze(head); // analyze is responsible for freeing the memory in head
@@ -83,8 +94,7 @@ int daemon_function() {
                 tail = cur;
             }
         } else {
-            pclose(desc);
-            return 1;
+            // line was T line
         }
     }
     pclose(desc);
