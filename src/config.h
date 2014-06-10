@@ -1,3 +1,5 @@
+#ifndef CONFIGURATION
+#define CONFIGURATION
 
 #define trackpad_scale_factor 20
 #define trackpad_min_duration 100
@@ -31,3 +33,5 @@
 #define TAP_3 ""
 #define TAP_4 ""
 #define TAP_5 ""
+
+#endif

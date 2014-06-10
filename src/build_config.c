@@ -7,7 +7,8 @@ int main() {
         return 1;
     }
 
-    FILE* op = popen("synclient", "r");
+    //FILE* op = popen("synclient", "r");
+    FILE* op = popen("cat synclient.in", "r");
     if (op == NULL) {
         return 1;
     }

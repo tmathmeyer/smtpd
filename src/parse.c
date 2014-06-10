@@ -8,7 +8,7 @@
  */
 int build_int(int old, char n) {
     if (n == ' ') {
-        return old;
+        n = '0';
     }
     if (n == '.') {
         return old;
@@ -19,7 +19,10 @@ int build_int(int old, char n) {
     return (old*10) + (n-'0');
 }
 
-
+// reads the input from the file descriptor and converts it into a "status"
+// packet which it then returns. I tried fscanf, but it seems to break, and
+// this works, so I'm going to stick with it. I'm not really concerned with
+// the size of the source code file.
 status* read_mouse_std(FILE* desc) {
     char lineID = fgetc(desc);
     while( (lineID=fgetc(desc)) == ' ' );
@@ -31,18 +34,47 @@ status* read_mouse_std(FILE* desc) {
     }
 
     status* cur = malloc(sizeof(status));
-    float temp_time_store;
 
-    fscanf(desc, "%f %i %i %s %s %s",
-           &(temp_time_store),
-           &(cur -> contact_xpos),
-           &(cur -> contact_ypos),
-           &(cur -> contact_preassure),
-           &(cur -> contact_points),
-           &(cur -> contact_size));
-    cur -> reading_time = (int) (temp_time_store * 1000);
+    cur -> reading_time = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> reading_time
+            = build_int(cur -> reading_time, lineID);
+    }
+    while( (lineID=fgetc(desc)) == ' ' );
 
-    //scan to eol
+    cur -> contact_xpos = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> contact_xpos
+            = build_int(cur -> contact_xpos, lineID);
+    }
+    while( (lineID=fgetc(desc)) == ' ' );
+
+    cur -> contact_ypos = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> contact_ypos
+            = build_int(cur -> contact_ypos, lineID);
+    }
+    while( (lineID=fgetc(desc)) == ' ' );
+
+    cur -> contact_preassure = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> contact_preassure
+            = build_int(cur -> contact_preassure, lineID);
+    }
+    while( (lineID=fgetc(desc)) == ' ' );
+
+    cur -> contact_points = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> contact_points
+            = build_int(cur -> contact_points, lineID);
+    }
+    while( (lineID=fgetc(desc)) == ' ' );
+
+    cur -> contact_size = build_int(0, lineID);
+    while( (lineID=fgetc(desc)) != ' ' ) {
+        cur -> contact_size
+            = build_int(cur -> contact_size, lineID);
+    }
     while( (lineID=fgetc(desc)) != '\n' );
 
     return cur;
@@ -51,7 +83,7 @@ status* read_mouse_std(FILE* desc) {
 
 /*
  * reads in form:
- *      \[ *][matching]\[ *]=[ *][0-9]^\n
+ *      \ *[matching]\ *=[0-9]^\n
  *
  * MUST be queried in order, or given a new filedescriptor for each call
  */

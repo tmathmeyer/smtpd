@@ -18,6 +18,9 @@ parts:
 
 */
 
+#ifndef PARSE
+#define PARSE
+
 #include <stdio.h>
 
 typedef struct input {
@@ -39,3 +42,5 @@ int build_int(int old, char n);
 
 // reads from a file
 int config_read(FILE* descriptor, char* matching, int* saveto);
+
+#endif
